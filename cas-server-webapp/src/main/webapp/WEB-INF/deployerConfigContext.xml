@@ -75,11 +75,31 @@
     <alias name="defaultPrincipalElectionStrategy" alias="principalElectionStrategy" />
     <alias name="tgcCipherExecutor" alias="defaultCookieCipherExecutor" />
 
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="driverClassName" value="${master.jdbc.driverClassName}" />
-        <property name="url" value="${master.jdbc.url}" />
-        <property name="username" value="${master.jdbc.username}" />
-        <property name="password" value="${master.jdbc.password}" />
+    <!-- JDBC -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          p:driverClass="${master.jdbc.driverClassName}"
+          p:jdbcUrl="${master.jdbc.url}"
+          p:user="${master.jdbc.username}"
+          p:password="${master.jdbc.password}"
+
+
+          p:preferredTestQuery="${master.jdbc.testWhileIdle}"
+    />
+    <!--
+          p:initialPoolSize="${database.pool.minSize}"
+          p:minPoolSize="${database.pool.minSize}"
+          p:maxPoolSize="${database.pool.maxSize}"
+          p:maxIdleTimeExcessConnections="${database.pool.maxIdleTime}"
+          p:checkoutTimeout="${database.pool.maxWait}"
+          p:acquireIncrement="${database.pool.acquireIncrement}"
+          p:acquireRetryAttempts="${database.pool.acquireRetryAttempts}"
+          p:acquireRetryDelay="${database.pool.acquireRetryDelay}"
+          p:idleConnectionTestPeriod="${database.pool.idleConnectionTestPeriod}"
+
+        <property name="driverClass" value="${master.jdbc.driverClassName}" />
+        <property name="url" value="${}" />
+        <property name="username" value="$}" />
+        <property name="password" value="${}" />
         <property name="initialSize" value="${master.jdbc.initialSize}" />
         <property name="minIdle" value="${master.jdbc.minIdle}" />
         <property name="maxIdle" value="${master.jdbc.maxIdle}" />
@@ -89,27 +109,12 @@
         <property name="defaultAutoCommit" value="${master.jdbc.defaultAutoCommit}" />
         <property name="removeAbandoned" value="${master.jdbc.removeAbandoned}" />
         <property name="removeAbandonedTimeout" value="${master.jdbc.removeAbandonedTimeout}" />
-        <property name="testWhileIdle" value="${master.jdbc.testWhileIdle}" />
+        <property name="testWhileIdle" value="${}" />
         <property name="timeBetweenEvictionRunsMillis" value="${master.jdbc.timeBetweenEvictionRunsMillis}"/>
-    </bean>
 
-    <bean id="passwordEncoder"  class="org.jasig.cas.support.pms.PmsPasswordEncoder"  />
+    -->
 
-    <bean id="dbAuthHandler"
-          class="org.jasig.cas.adaptors.jdbc.QueryDatabaseAuthenticationHandler"
-          p:dataSource-ref="dataSource"
-          p:sql="select password from sys_user where USER_NAME = ? " />
-    <!-- IS_DEL STATUS -->
+    <alias name="pmsDatabaseAuthenticationHandler" alias="primaryAuthenticationHandler" />
+    <alias name="dataSource" alias="queryEncodeDatabaseDataSource" />
 
-    <bean id="authenticationManager" class="org.jasig.cas.authentication.PolicyBasedAuthenticationManager">
-        <constructor-arg>
-            <map>
-                <entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver" />
-                <entry key-ref="dbAuthHandler" value-ref="primaryPrincipalResolver"/>
-            </map>
-        </constructor-arg>
-        <property name="authenticationPolicy">
-            <bean class="org.jasig.cas.authentication.AnyAuthenticationPolicy" />
-        </property>
-    </bean>
 </beans>

@@ -23,7 +23,6 @@ import java.security.NoSuchAlgorithmException;
  * @version 1.0
  */
 
-@Component("pmsPasswordEncoder")
 public final class PmsPasswordEncoder implements PasswordEncoder {
 
 	private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8',

@@ -1,13 +1,9 @@
+description = 'Apereo CAS PMS Support'
 
-description = 'Apereo CAS YubiKey Support'
 dependencies {
-    
     compile project(':cas-server-core-authentication')
-    compile group: 'org.reflections', name: 'reflections', version:reflectionsVersion
-    compile(group: 'com.yubico', name: 'yubico-validation-client2', version:yubicoVersion) {
-        exclude(group: 'org.slf4j', module: 'slf4j-api')
-        exclude(group: 'commons-codec', module: 'commons-codec')
-    }
+    compile project(':cas-server-support-jdbc')
+    compile fileTree(dir: 'cas-server-support-pms/libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
 }
-
-
