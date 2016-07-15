@@ -26,6 +26,8 @@ import java.util.Map;
  * All Rights Reserved.<br />
  * created on 7/15/16
  *
+ * pms用户登录校验
+ *
  * @author lcs
  * @version 1.0
  */
