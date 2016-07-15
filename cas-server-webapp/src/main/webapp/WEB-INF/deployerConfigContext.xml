@@ -115,6 +115,6 @@
     -->
 
     <alias name="pmsDatabaseAuthenticationHandler" alias="primaryAuthenticationHandler" />
-    <alias name="dataSource" alias="queryEncodeDatabaseDataSource" />
+    <alias name="dataSource" alias="psmDatabaseDataSource" />
 
 </beans>

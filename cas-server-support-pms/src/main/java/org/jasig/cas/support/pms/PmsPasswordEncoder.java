@@ -1,13 +1,8 @@
 package org.jasig.cas.support.pms;
 
-import org.apache.commons.codec.binary.Base64;
-import org.jasig.cas.authentication.handler.PasswordEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -17,13 +12,13 @@ import java.security.NoSuchAlgorithmException;
  * All Rights Reserved.<br />
  * created on 7/14/16
  *
- * MD5( BASE_64( password ) + salt )
+ * MD5( password  + salt )
  *
  * @author lcs
  * @version 1.0
  */
 
-public final class PmsPasswordEncoder implements PasswordEncoder {
+public final class PmsPasswordEncoder {
 
 	private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8',
 			'9', 'a', 'b', 'c', 'd', 'e', 'f'};
@@ -36,27 +31,20 @@ public final class PmsPasswordEncoder implements PasswordEncoder {
 
 	private static final String CHARACTER_ENCODING = "utf-8";
 
-
-	@Autowired
-	private DataSource dataSource;
-
-	@Override
-	public String encode(final String password) {
+	public static String encode(final String password , final String salt) {
 		if (password == null) {
 			return null;
 		}
-
 		try {
-			final String salt = "";
-			final String passwordBase64 = new String(Base64.encodeBase64(password.getBytes(CHARACTER_ENCODING)));
+
 			final MessageDigest messageDigest = MessageDigest.getInstance(ENCODING_ALGORITHM);
 
-			messageDigest.update((passwordBase64 + salt).getBytes(CHARACTER_ENCODING));
+			messageDigest.update((password + salt).getBytes(CHARACTER_ENCODING));
 
 			final byte[] digest = messageDigest.digest();
 			final String encodePassword = getFormattedText(digest);
 
-			LOGGER.info(" password : {} , salt : {} , passwordBase64 : {} , encodePassowrd : {}", password, salt, passwordBase64, encodePassword);
+			LOGGER.info(" password : {} , salt : {} , encodePassowrd : {}", password, salt, encodePassword);
 
 			return encodePassword;
 		} catch (final NoSuchAlgorithmException e) {
@@ -82,5 +70,4 @@ public final class PmsPasswordEncoder implements PasswordEncoder {
 		}
 		return buf.toString();
 	}
-
 }
