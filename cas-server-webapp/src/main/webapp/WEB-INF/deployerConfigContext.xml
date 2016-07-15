@@ -74,4 +74,42 @@
     <alias name="defaultAuthenticationTransactionManager" alias="authenticationTransactionManager" />
     <alias name="defaultPrincipalElectionStrategy" alias="principalElectionStrategy" />
     <alias name="tgcCipherExecutor" alias="defaultCookieCipherExecutor" />
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClassName" value="${master.jdbc.driverClassName}" />
+        <property name="url" value="${master.jdbc.url}" />
+        <property name="username" value="${master.jdbc.username}" />
+        <property name="password" value="${master.jdbc.password}" />
+        <property name="initialSize" value="${master.jdbc.initialSize}" />
+        <property name="minIdle" value="${master.jdbc.minIdle}" />
+        <property name="maxIdle" value="${master.jdbc.maxIdle}" />
+        <property name="maxActive" value="${master.jdbc.maxActive}" />
+        <property name="maxWait" value="${master.jdbc.maxWait}" />
+        <property name="poolPreparedStatements" value="${master.jdbc.poolPreparedStatements}" />
+        <property name="defaultAutoCommit" value="${master.jdbc.defaultAutoCommit}" />
+        <property name="removeAbandoned" value="${master.jdbc.removeAbandoned}" />
+        <property name="removeAbandonedTimeout" value="${master.jdbc.removeAbandonedTimeout}" />
+        <property name="testWhileIdle" value="${master.jdbc.testWhileIdle}" />
+        <property name="timeBetweenEvictionRunsMillis" value="${master.jdbc.timeBetweenEvictionRunsMillis}"/>
+    </bean>
+
+    <bean id="passwordEncoder"  class="org.jasig.cas.authentication.handler.PmsPasswordEncoder"  />
+
+    <bean id="dbAuthHandler"
+          class="org.jasig.cas.adaptors.jdbc.QueryDatabaseAuthenticationHandler"
+          p:dataSource-ref="dataSource"
+          p:sql="select password from sys_user where USER_NAME = ? " />
+    <!-- IS_DEL STATUS -->
+
+    <bean id="authenticationManager" class="org.jasig.cas.authentication.PolicyBasedAuthenticationManager">
+        <constructor-arg>
+            <map>
+                <entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver" />
+                <entry key-ref="dbAuthHandler" value-ref="primaryPrincipalResolver"/>
+            </map>
+        </constructor-arg>
+        <property name="authenticationPolicy">
+            <bean class="org.jasig.cas.authentication.AnyAuthenticationPolicy" />
+        </property>
+    </bean>
 </beans>
