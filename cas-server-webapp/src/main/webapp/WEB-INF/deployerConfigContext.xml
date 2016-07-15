@@ -93,7 +93,7 @@
         <property name="timeBetweenEvictionRunsMillis" value="${master.jdbc.timeBetweenEvictionRunsMillis}"/>
     </bean>
 
-    <bean id="passwordEncoder"  class="org.jasig.cas.authentication.handler.PmsPasswordEncoder"  />
+    <bean id="passwordEncoder"  class="org.jasig.cas.support.pms.PmsPasswordEncoder"  />
 
     <bean id="dbAuthHandler"
           class="org.jasig.cas.adaptors.jdbc.QueryDatabaseAuthenticationHandler"

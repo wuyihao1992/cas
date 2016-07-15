@@ -1,4 +1,4 @@
-package org.jasig.cas.authentication.handler.bean;
+package org.jasig.cas.support.pms.bean;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package org.jasig.cas.authentication.handler.dao;
+package org.jasig.cas.support.pms.dao;
 
 /**
  * Copyright (c) 2016 Hengte Technology Co.,Ltd.
